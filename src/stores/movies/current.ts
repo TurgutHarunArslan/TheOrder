@@ -20,6 +20,10 @@ const currentUrl = derived(
 );
 
 async function fetchMovieData(id: string) {
+    if (id == ''){
+        currentMovie.set(null)
+        return
+    }
     const ENDPOINT = `${BASE_URL}/movie/${id}?api_key=${API_KEY}`;
     try {
         const response = await fetch(ENDPOINT);

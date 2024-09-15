@@ -3,11 +3,11 @@ import type { Show } from '../../types/types';
 const API_KEY = '9313885ee41ab3fa03dd3907236ff042';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const MOVIE_SEARCH = `${BASE_URL}/search/tv?api_key=${API_KEY}&include_adult=false&language=en-US&page=1`;
-
-
+const loading = writable(false)
 const series = writable<Show[]>([]);
 
 async function fetchQuerySeries(query : string) {
+    loading.set(true)
     try {
         const response = await fetch(MOVIE_SEARCH + "&query=" + query);
         if (!response.ok) {
@@ -20,6 +20,7 @@ async function fetchQuerySeries(query : string) {
         console.error('Error fetching movies:', error);
         series.set([]);
     }
+    loading.set(false)
 }
 
-export {series as Resultseries,fetchQuerySeries}
+export {series as Resultseries,fetchQuerySeries, loading as seriesLoading}

@@ -67,6 +67,10 @@ function LoadShow(showid: string,seasons : Season[]){
 
 async function FetchShowDetails(id:string){
     let ENDPOINT = `${BASE_URL}/tv/${id}?api_key=${API_KEY}`;
+    if (id == ''){
+        currentShow.set(null)
+        return
+    }
     try {
         const response = await fetch(ENDPOINT);
         if (!response.ok) {

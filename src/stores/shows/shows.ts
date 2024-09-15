@@ -3,7 +3,7 @@ import type { AllShows} from '../../types/types';
 import { shows as weeklyShows } from './weekly';
 import { shows as dailyShows } from './daily';
 import { shows as Continues, LoadShows } from './continue';
-import { fetchQuerySeries, Resultseries } from './search';
+import { fetchQuerySeries, Resultseries,seriesLoading } from './search';
 
 const shows = writable<AllShows>({
     Weekly:  [],
@@ -32,4 +32,4 @@ function Search(query : string){
     fetchQuerySeries(query)
 }
 
-export {shows,Search,LoadShows}
+export {shows,Search,LoadShows,seriesLoading}

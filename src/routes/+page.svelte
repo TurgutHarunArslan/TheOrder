@@ -1,11 +1,10 @@
 <script lang="ts">
-import {movies as ms, Search as mSearch,LoadMovies} from  "../stores/movies/movies"
+import {movies as ms, Search as mSearch,LoadMovies,movieLoading} from  "../stores/movies/movies"
 import type { AllMovies, AllShows } from "../types/types";
-import { goto } from "$app/navigation";
-import { LoadShows, Search as sSearch, shows as sw } from "../stores/shows/shows";
+import { LoadShows, Search as sSearch, shows as sw ,seriesLoading} from "../stores/shows/shows";
 import { onMount } from "svelte";
-  import Media from "../component/media.svelte";
-  import MediaContinue from "../component/mediaContinue.svelte";
+import Media from "../component/media.svelte";
+import MediaContinue from "../component/mediaContinue.svelte";
 let query = '';
 
 export let movies : AllMovies = {
@@ -24,6 +23,9 @@ export let shows : AllShows = {
 
 $: movies = $ms
 $: shows = $sw
+$: mloading = $movieLoading
+$: sloading = $seriesLoading
+
 $: {
     mSearch(query)
     sSearch(query)
@@ -63,11 +65,15 @@ onMount(()=>{
         {:else}
 
             {#if movies.Search.length > 0 || shows.Search.length > 0}
-                <Media Media={movies.Search} header='Movies'/>
                 <Media Media={shows.Search} header='Shows'/>
-            {:else}
+                <Media Media={movies.Search} header='Movies'/>
+            {:else if sloading == false && mloading == false}
                 <h1 style="text-align: center; color: whitesmoke;">
                     No Search Results :()
+                </h1>
+            {:else}
+                <h1 style="text-align: center; color: whitesmoke;">
+                    Searching..
                 </h1>
             {/if}
 

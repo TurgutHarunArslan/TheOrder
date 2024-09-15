@@ -44,7 +44,11 @@ function delete_movie(id: string) {
             class="media-card" 
             on:click={() => goto("/show?Id=" + item.id)}
             style="background-image: url('https://image.tmdb.org/t/p/w500{item.poster_path}');">
-            <button class="media-del" on:click={(e) => { e.stopPropagation(); remove_item(item); }}>Delete</button>
+            <button class="media-del" on:click={(e) => { e.stopPropagation(); remove_item(item); }}>
+              <svg width="32" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
             <span class="media-text">{item.name}</span>
         </div>
       <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -53,7 +57,11 @@ function delete_movie(id: string) {
               class="media-card" 
               on:click={() => goto("/movie?Id=" + item.id)}
               style="background-image: url('https://image.tmdb.org/t/p/w500{item.poster_path}');">
-              <button class="media-del" on:click={(e) => { e.stopPropagation(); remove_item(item); }}>Delete</button>
+              <button class="media-del" on:click={(e) => { e.stopPropagation(); remove_item(item); }}>
+                <svg width="32" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
               <span class="media-text">{item.title}</span>
           </div>
       {/if}
@@ -79,15 +87,14 @@ function delete_movie(id: string) {
     max-height: 450px;
     overflow: hidden;
     cursor: pointer;
-
     position: relative;
 }
 
 .media-del {
   z-index: 2;
-  background: transparent;
   border: none;
   color: whitesmoke;
+  background: rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 10px;
   right: 10px;

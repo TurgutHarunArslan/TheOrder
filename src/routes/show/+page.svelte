@@ -1,7 +1,9 @@
 <script lang="ts">
+    import "../global.css"
     import type { ProviderName,CurrentShow as ShowType,Season } from "../../types/types";
     import { page } from "$app/stores";
     import { setShowId,SetCurrentProvider,currentUrl,currentShow,currentProvider,providers,currentEpisode,currentSeason, SetCurrentEp, SetCurrentSeason} from "../../stores/shows/current";
+    import { onDestroy } from "svelte";
 
     let Providers : ProviderName[] = Object.keys(providers) as ProviderName[]
     let movieID = ''
@@ -34,73 +36,104 @@
 
     }
 
+    onDestroy(()=>{
+        setShowId("")
+    })
 </script>
-
-<main id="main">
-    <section id="ProviderSection" >
+<main>
+    <div id="Poster">
         <h3>{show?.name}</h3>
-        <img src={`https://image.tmdb.org/t/p/w300${show?.poster_path}`} alt={show?.name}/>
+        <img src={`https://image.tmdb.org/t/p/w500${show?.poster_path}`} alt={show?.name} />
+    </div>
+    <div id="Providers"> 
+        {#each Providers as provider}
+            <button class="option {currentprovider === provider ? 'selected' : ''}" on:click={() => SetCurrentProvider(provider)}>
+                {provider}
+            </button>
+        {/each}
+    </div>
 
-        <h4>Providers</h4>
-        <select bind:value={currentprovider} on:change={() => SetCurrentProvider(currentprovider as ProviderName)}>
-            {#each Providers as provider}
-                <option value={provider}>{provider}</option>
+    <div id="SeasonSection">
+        <div id="ses">
+            {#each seasons as ses}
+                <button class="option {CurrentSes === ses.season_number ? 'selected' : ''}" on:click={() => SetCurrentSeason(ses.season_number,"1")}>
+                    {ses.name}
+                </button>
             {/each}
-        </select>
-
-        <div>
-            <h4>Seasons</h4>
-            <select bind:value={CurrentSes} on:click={ () => SetCurrentSeason(CurrentSes,"1")}>
-                {#each seasons as season}
-                    <option value={season.season_number}>{season.name}</option>
-                {/each}
-            </select>
-    
-            <h4>Episodes</h4>
-            <select bind:value={CurrentEp} on:click={ () => SetCurrentEp(CurrentEp)}>
-                {#each episodes as episode}
-                    <option value={episode}>{episode}</option>
-                {/each}
-            </select>
         </div>
+    </div>
 
-    </section>
+    <div id="EpSection">
+        <div id="eps">
+            {#each episodes as ep}
+                <button class="option {CurrentEp === ep ? 'selected' : ''}" on:click={() => SetCurrentEp(ep)}>
+                    {ep}
+                </button>
+            {/each}
+        </div>
+    </div>
 
-    <section id="PlayerSection">
+    <div id="PlayerSection">
         <iframe src={url} title="Movie" frameborder='0' allowfullscreen></iframe>
-    </section>
-
+    </div>
 </main>
-
+    
 <style>
-    #main{
-        display: flex;
-        min-width: 100vw;
-        min-height: 100vh;
-		margin: 0;
-		padding: 0;
-        color: white;
-    }
-    #ProviderSection{
-        width: 20%;
-        padding: 10px;
-        text-align: center;
-    }
-    #ProviderSection > h3 {
-        height: fit-content;
-    }
-    #ProviderSection > img{
-        width: 100%;
-        height: 50%;
-    }
-    #PlayerSection{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-content: center;
-    }
-    iframe{
-        width: 80%;
-        height: 80%;
-    }
+main{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 32px;
+    row-gap: 16px;
+    min-width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+#PlayerSection{
+    grid-area: 2 / 2 / 5 / 5;
+}
+#PlayerSection > iframe{
+    width: 100%;
+    height: 100%;
+}
+
+#Poster{
+    grid-area: 2 / 1 / 5 / 2;
+}
+
+#Poster > img {
+    width: 100%;
+    height: 80%;
+}
+#Providers{
+    grid-area: 1 / 2 / 2 / 3;
+    align-content: end;
+}
+
+#SeasonSection{
+    grid-area: 1 / 5 / 2 / 6;
+    align-content: end;
+}
+#ses{
+    max-width: 20vw;
+    height: 6vh;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+#EpSection{
+    grid-area: 2 / 5 / 5 / 6;
+}
+#eps{
+    max-width: 20vw;
+    height: 5vh;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+#eps > button {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+}
 </style>

@@ -4,10 +4,11 @@ const API_KEY = '9313885ee41ab3fa03dd3907236ff042';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const MOVIE_SEARCH = `${BASE_URL}/search/movie?api_key=${API_KEY}&include_adult=false&language=en-US&page=1`;
 
-
+const loading = writable(false)
 const movies = writable<Movie[]>([]);
 
 async function fetchQueryMovies(query : string) {
+    loading.set(true)
     try {
         const response = await fetch(MOVIE_SEARCH + "&query=" + query);
         if (!response.ok) {
@@ -20,6 +21,7 @@ async function fetchQueryMovies(query : string) {
         console.error('Error fetching movies:', error);
         movies.set([]);
     }
+    loading.set(false)
 }
 
-export {movies as Resultmovies,fetchQueryMovies}
+export {movies as Resultmovies,fetchQueryMovies,loading as movieLoading}

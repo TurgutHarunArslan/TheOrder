@@ -3,7 +3,7 @@ import type { AllMovies} from '../../types/types';
 import { movies as weeklyMovies } from './weekly';
 import { movies as dailyMovies } from './daily';
 import { movies as Continues, LoadMovies } from './continue';
-import { Resultmovies,fetchQueryMovies } from './search';
+import { Resultmovies,fetchQueryMovies,movieLoading} from './search';
 
 const movies = writable<AllMovies>({
     Weekly:  [],
@@ -32,4 +32,4 @@ function Search(query : string){
     fetchQueryMovies(query)
 }
 
-export {movies,Search,LoadMovies}
+export {movies,Search,LoadMovies,movieLoading}
