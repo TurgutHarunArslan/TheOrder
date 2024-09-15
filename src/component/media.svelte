@@ -4,7 +4,7 @@
   export let Media: Show[] | Movie[];
   export let header: string;
 </script>
-
+{#if Media.length > 0}
 <section>
     <h1 style="text-align: center; color: white; font-size: 2rem;">{header}</h1>
     <div class="MediaContainer">
@@ -29,6 +29,7 @@
         {/each}
     </div>
 </section>
+{/if}
 
 
 

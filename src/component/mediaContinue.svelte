@@ -8,8 +8,29 @@
   function isShow(item: Show | Movie): item is Show {
     return 'first_air_date' in item;
   }
+
+function remove_item(item: Show | Movie) {
+  if (isShow(item)) {
+    delete_show(item.id);
+  } else {
+    delete_movie(item.id);
+  }
+
+  mediaList = mediaList.filter(mediaItem => mediaItem.id !== item.id);
+}
+
+function delete_show(id: string) {
+  localStorage.removeItem("tv_" + id);
+}
+
+function delete_movie(id: string) {
+  localStorage.removeItem("sh_" + id);
+}
+
 </script>
 
+{#if mediaList.length > 0}
+  
 <section>
   <h1 style="text-align: center; color: white; font-size: 2rem;">{header}</h1>
   <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -23,6 +44,7 @@
             class="media-card" 
             on:click={() => goto("/show?Id=" + item.id)}
             style="background-image: url('https://image.tmdb.org/t/p/w500{item.poster_path}');">
+            <button class="media-del" on:click={(e) => { e.stopPropagation(); remove_item(item); }}>Delete</button>
             <span class="media-text">{item.name}</span>
         </div>
       <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -31,6 +53,7 @@
               class="media-card" 
               on:click={() => goto("/movie?Id=" + item.id)}
               style="background-image: url('https://image.tmdb.org/t/p/w500{item.poster_path}');">
+              <button class="media-del" on:click={(e) => { e.stopPropagation(); remove_item(item); }}>Delete</button>
               <span class="media-text">{item.title}</span>
           </div>
       {/if}
@@ -38,6 +61,8 @@
     
   </div>
 </section>
+
+{/if}
 
 
 <style>
@@ -54,6 +79,23 @@
     max-height: 450px;
     overflow: hidden;
     cursor: pointer;
+
+    position: relative;
+}
+
+.media-del {
+  z-index: 2;
+  background: transparent;
+  border: none;
+  color: whitesmoke;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.media-del:hover {
+  opacity: 0.8;
 }
 
 .media-text {

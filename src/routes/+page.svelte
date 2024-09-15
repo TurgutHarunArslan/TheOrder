@@ -8,14 +8,14 @@ import { onMount } from "svelte";
   import MediaContinue from "../component/mediaContinue.svelte";
 let query = '';
 
-let movies : AllMovies = {
+export let movies : AllMovies = {
     Weekly: [],
     Daily:[],
     Search:[],
     Continue:[]
 }
 
-let shows : AllShows = {
+export let shows : AllShows = {
     Weekly: [],
     Daily:[],
     Search:[],
@@ -32,7 +32,6 @@ $: {
 onMount(()=>{
     LoadShows()
     LoadMovies()
-
 })
 
 </script>
@@ -51,25 +50,15 @@ onMount(()=>{
 
         {#if (query == '' || query == null)}
 
-            {#if ( movies.Continue.length > 0 ) || shows.Continue.length > 0}
             <MediaContinue header="Continue Watching" mediaList={[...shows.Continue, ...movies.Continue]}/>
-            {/if}
 
-            {#if movies.Weekly.length > 0}
             <Media Media={movies.Weekly} header='Movies Of The Week'/>
-            {/if}
             
-            {#if movies.Daily.length > 0}
             <Media Media={movies.Daily} header='Movies Of The Day'/>
-            {/if}
 
-            {#if shows.Daily.length > 0}
             <Media Media={shows.Daily} header='TV Series Of The Day'/>
-            {/if}
 
-            {#if shows.Weekly.length > 0}
             <Media Media={shows.Weekly} header='TV Series Of The Week'/>
-            {/if}
 
         {:else}
 
