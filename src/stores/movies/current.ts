@@ -1,4 +1,4 @@
-import { writable, derived } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 import type { Movie, ProviderName } from '../../types/types';
 
 const providers = {
@@ -28,15 +28,22 @@ async function fetchMovieData(id: string) {
         }
         const data = await response.json();
         currentMovie.set(data);
+        save_progress(data)
     } catch (error) {
         console.error('Error fetching movie data:', error);
         currentMovie.set(null);
     }
 }
 
+function save_progress(data : Movie){
+    const combined = {
+        movie: data,
+    };
+    localStorage.setItem("sh_" + get(currentMovieID), JSON.stringify(combined));
+}
+
 function setMovieID(id: string) {
     currentMovieID.set(id);
-    localStorage.setItem("show_" + id,"");
     fetchMovieData(id);
 }
 

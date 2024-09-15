@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { ProviderName,CurrentShow as ShowType,Season } from "../../types/types";
     import { page } from "$app/stores";
-    import { setShowId,SetCurrentProvider,currentUrl,currentShow,currentProvider,providers,currentEpisode,currentSeason, SetCurrentEp, SetCurrentSeason} from "../../stores/shows/current.";
+    import { setShowId,SetCurrentProvider,currentUrl,currentShow,currentProvider,providers,currentEpisode,currentSeason, SetCurrentEp, SetCurrentSeason} from "../../stores/shows/current";
 
     let Providers : ProviderName[] = Object.keys(providers) as ProviderName[]
     let movieID = ''

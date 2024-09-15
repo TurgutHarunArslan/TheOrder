@@ -5,9 +5,12 @@ export interface Movie {
     poster_path: string;
     release_date: string;
 }
+
 export interface AllMovies {
     Weekly:Movie[];
     Daily:Movie[];
+    Search:Movie[]
+    Continue:Movie[]
 }
 
 export interface Show {
@@ -33,5 +36,7 @@ export interface CurrentShow {
 export interface AllShows {
     Weekly:Show[];
     Daily:Show[];
+    Search:Show[]
+    Continue:Show[]
 }
 export type ProviderName = "VidBinge" | "Vidlink";

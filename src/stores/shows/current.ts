@@ -12,16 +12,24 @@ const currentShow = writable<CurrentShow | null>()
 const currentShowID = writable<string>()
 
 const currentProvider = writable<ProviderName>("VidBinge")
-const currentSeason = writable<string>("1")
+const currentSeason = writable<string>()
 
-const currentEpisode = writable<string>("1")
+const currentEpisode = writable<string>()
 
 const currentUrl = derived(
     [currentShowID,currentProvider, currentSeason, currentEpisode],
     ([$currentShowID,$currentProvider, $currentSeason, $currentEpisode]) => 
         `${providers[$currentProvider]}/${$currentShowID}/${$currentSeason}/${$currentEpisode}`
-);
+)
 
+function save_progress(){
+    const combined = {
+        show: get(currentShow),
+        seasonNumber: get(currentSeason),
+        episodeNumber: get(currentEpisode),
+    };
+    localStorage.setItem("tv_" + get(currentShowID), JSON.stringify(combined));
+}
 
 function setShowId(id: string) {
     currentShowID.set(id);
@@ -29,17 +37,17 @@ function setShowId(id: string) {
 }
 
 function SetCurrentSeason(sesnumber : string,epnumber : string){
+    if (sesnumber == get(currentSeason)){
+        return
+    }
     currentSeason.set(sesnumber)
+    save_progress()
     currentEpisode.set(epnumber)
 }
 
 function SetCurrentEp(number : string){
     currentEpisode.set(number)
-    const combined = {
-        seasonNumber: get(currentSeason),
-        episodeNumber: get(currentEpisode),
-    };
-    localStorage.setItem("tv_" + get(currentShowID), JSON.stringify(combined));
+    save_progress()
 }
 
 function SetCurrentProvider(provider : ProviderName): void{
@@ -49,7 +57,7 @@ function SetCurrentProvider(provider : ProviderName): void{
 function LoadShow(showid: string,seasons : Season[]){
     const Data = localStorage.getItem("tv_" + showid);
     if (Data) {
-        const { seasonNumber, episodeNumber } = JSON.parse(Data);
+        const { show,seasonNumber, episodeNumber } = JSON.parse(Data);
         SetCurrentSeason(seasonNumber || seasons[0].season_number,episodeNumber || "1");
     }else{
         SetCurrentSeason(seasons[0].season_number,"1")
@@ -67,6 +75,7 @@ async function FetchShowDetails(id:string){
         const data : CurrentShow = await response.json();
         currentShow.set(data);
         LoadShow(id,data.seasons)
+        save_progress()
     } catch (error) {
         console.error('Error fetching movies:', error);
         currentShow.set(null);
