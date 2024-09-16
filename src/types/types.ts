@@ -39,4 +39,4 @@ export interface AllShows {
     Search:Show[]
     Continue:Show[]
 }
-export type ProviderName = "VidBinge" | "Vidlink";
+export type ProviderName = "VidBinge" | "Vidlink" | "VidSrc";

@@ -1,6 +1,8 @@
 import { derived, get, writable } from 'svelte/store';
 import type { ProviderName, CurrentShow, Season } from '../../types/types';
+
 const providers = {
+    "VidSrc": "https://vidsrc.me/embed/tv",
     "VidBinge" : "https://vidbinge.dev/embed/tv/",
     "Vidlink": "https://vidlink.pro/tv/"
 }
@@ -11,16 +13,25 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 const currentShow = writable<CurrentShow | null>()
 const currentShowID = writable<string>()
 
-const currentProvider = writable<ProviderName>("VidBinge")
+const currentProvider = writable<ProviderName>("VidSrc")
 const currentSeason = writable<string>()
 
 const currentEpisode = writable<string>()
 
 const currentUrl = derived(
-    [currentShowID,currentProvider, currentSeason, currentEpisode],
-    ([$currentShowID,$currentProvider, $currentSeason, $currentEpisode]) => 
-        `${providers[$currentProvider]}/${$currentShowID}/${$currentSeason}/${$currentEpisode}`
-)
+    [currentShowID, currentProvider, currentSeason, currentEpisode],
+    ([$currentShowID, $currentProvider, $currentSeason, $currentEpisode]) => {
+        return buildUrl($currentShowID, $currentProvider, $currentSeason, $currentEpisode);
+    }
+);
+
+function buildUrl(showID: string, provider: ProviderName, season: string, episode: string) {
+    let providerUrl = providers[provider]
+    if (provider == "VidSrc"){
+        return `${providerUrl}?tmdb=${showID}&season=${season}&episode${episode}`;
+    }
+    return `${providerUrl}/${showID}/${season}/${episode}`;
+}
 
 function save_progress(){
     const combined = {

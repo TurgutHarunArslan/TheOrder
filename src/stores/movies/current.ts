@@ -2,6 +2,7 @@ import { writable, derived, get } from 'svelte/store';
 import type { Movie, ProviderName } from '../../types/types';
 
 const providers = {
+    "VidSrc": "https://vidsrc.me/embed/movie",
     "VidBinge": "https://vidbinge.dev/embed/movie/",
     "Vidlink": "https://vidlink.pro/movie/"
 };
@@ -11,13 +12,23 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 
 const currentMovie = writable<Movie | null>(null);
 const currentMovieID = writable<string | null>(null);
-const currentProvider = writable<ProviderName>("VidBinge");
+const currentProvider = writable<ProviderName>("VidSrc");
 
 const currentUrl = derived(
-    [currentProvider, currentMovieID],
-    ([$currentProvider, $currentMovieID]) => 
-        $currentMovieID ? `${providers[$currentProvider]}${$currentMovieID}` : ""
+    [currentProvider,currentMovieID],
+    ([$currentProvider, $currentMovieID]) =>  {
+        let movieId : string = $currentMovieID as string
+        return buildUrl($currentProvider,movieId);
+    }
 );
+
+function buildUrl(provider: ProviderName,movieId: string ) {
+    let providerUrl = providers[provider]
+    if (provider == "VidSrc"){
+        return `${providerUrl}?tmdb=${movieId}`;
+    }
+    return `${providerUrl}/${movieId}`;
+}
 
 async function fetchMovieData(id: string) {
     if (id == ''){

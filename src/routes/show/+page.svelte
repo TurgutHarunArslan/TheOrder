@@ -4,6 +4,7 @@
     import { page } from "$app/stores";
     import { setShowId,SetCurrentProvider,currentUrl,currentShow,currentProvider,providers,currentEpisode,currentSeason, SetCurrentEp, SetCurrentSeason} from "../../stores/shows/current";
     import { onDestroy } from "svelte";
+    import { goto } from "$app/navigation";
 
     let Providers : ProviderName[] = Object.keys(providers) as ProviderName[]
     let movieID = ''
@@ -40,6 +41,13 @@
         setShowId("")
     })
 </script>
+
+<button style="color: white; position: absolute;" on:click={()=>{goto("/")} }>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.294 18.706a1 1 0 0 1-1.408 0l-6-6a1 1 0 0 1 0-1.408l6-6a1 1 0 0 1 1.408 1.408L10.416 12l4.878 4.878a1 1 0 0 1 0 1.408z" fill="#000"/>
+    </svg>
+</button>
+
 <main>
     <div id="Poster">
         <h3>{show?.name}</h3>
