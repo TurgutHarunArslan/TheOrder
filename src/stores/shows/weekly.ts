@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Show } from '../../types/types';
-const API_KEY = '9313885ee41ab3fa03dd3907236ff042';
+import { API_KEY } from '$lib/api';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const WEEKLY_SHOWS_ENDPOINT = `${BASE_URL}/trending/tv/week?api_key=${API_KEY}`;
 

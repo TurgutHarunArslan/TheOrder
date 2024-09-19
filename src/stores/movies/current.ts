@@ -1,13 +1,12 @@
 import { writable, derived, get } from 'svelte/store';
 import type { Movie, ProviderName } from '../../types/types';
-
+import { API_KEY } from '$lib/api';
 const providers = {
     "VidSrc": "https://vidsrc.me/embed/movie",
     "VidBinge": "https://vidbinge.dev/embed/movie/",
     "Vidlink": "https://vidlink.pro/movie/"
 };
 
-const API_KEY = '9313885ee41ab3fa03dd3907236ff042';
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 const currentMovie = writable<Movie | null>(null);
